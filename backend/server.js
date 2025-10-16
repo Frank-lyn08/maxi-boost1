@@ -40,7 +40,7 @@ function hashPassword(password, salt) {
 }
 
 // 🟢 REGISTER
-app.post('/register', async (req, res) => {
+app.post('/reg', async (req, res) => {
   const { fullname, username, password } = req.body;
 
   if (!fullname || !username || !password) {
@@ -124,4 +124,5 @@ app.post('/logout', (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
 
