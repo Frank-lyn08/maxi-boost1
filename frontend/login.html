@@ -369,32 +369,47 @@
 
 const form = document.getElementById('loginForm');
 const submitBtn = document.getElementById('submitBtn');
+
 form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('confirm');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Logging in...';
-    try {
-        const res = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({ username: usernameInput.value, password: passwordInput.value })
-        });
-        const data = await res.json();
-        alert(data.message || 'Result');
-        if (res.ok) {
-            window.location.href = 'home.html';
-        } else {
-            window.location.href = 'reg.html';
-        }
-    } catch (err) {
-        alert('Login failed');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Login';
+  e.preventDefault();
+
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('confirm');
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Logging in...';
+
+  try {
+    const res = await fetch('https://maxi-boost1-3.onrender.com/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        username: usernameInput.value.trim(),
+        password: passwordInput.value.trim()
+      })
+    });
+
+    const data = await res.json();
+    alert(data.message || 'Result');
+
+    if (res.ok) {
+      window.location.href = 'home.html';
+    } else {
+      window.location.href = 'reg.html';
     }
+  } catch (err) {
+    alert('Login failed. Please check your connection.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Login';
+  }
 });
+
       
     </script>
 </body>
+
 </html>
