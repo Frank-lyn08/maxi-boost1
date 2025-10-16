@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Connect to MongoDB Atlas
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(mongodb+srv://mongodb+srv://franklyn:8653@maxiboost.pgefvxo.mongodb.net/?retryWrites=true&w=majority&appName=maxiboost, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -124,3 +124,4 @@ app.post('/logout', (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
