@@ -1,0 +1,473 @@
+<!doctype html>
+<!-- reg.html - Responsive registration UI for Maxi Boost -->
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maxi Boost — Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --plum-700: #6f2d86;
+            --plum-500: #8e44ad;
+            --plum-300: #b77cd3;
+            --green-600: #27ae60;
+            --green-400: #2ecc71;
+            --bg-gradient: linear-gradient(135deg, rgba(111,45,134,0.97) 0%, rgba(39,174,96,0.95) 100%);
+            --glass: rgba(255,255,255,0.06);
+            --card-bg: rgba(255,255,255,0.96);
+            --muted: #6b7280;
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        html,body{
+            height:100%;
+            margin:0;
+            background: var(--bg-gradient);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            color:#0f1724;
+        }
+
+        .container{
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:32px;
+        }
+
+        .card{
+            max-width:1100px;
+            width:100%;
+            border-radius:16px;
+            overflow:hidden;
+            display:grid;
+            grid-template-columns: 1fr 480px;
+            gap:0;
+            box-shadow: 0 10px 40px rgba(2,6,23,0.35);
+            background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,250,250,0.98) 100%);
+        }
+
+        /* left brand / promo panel */
+        .brand-side{
+            padding:44px;
+            background-image: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0)), radial-gradient(600px 300px at 10% 20%, rgba(255,255,255,0.04), transparent);
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            gap:20px;
+            color:white;
+            background: var(--bg-gradient);
+        }
+        .logo{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            color:white;
+            text-decoration:none;
+        }
+        .logo .mark{
+            width:48px;
+            height:48px;
+            border-radius:10px;
+            display:inline-grid;
+            place-items:center;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(6px);
+            box-shadow: inset 0 -6px 16px rgba(0,0,0,0.08);
+            font-weight:700;
+            font-size:18px;
+        }
+        .title{
+            font-size:28px;
+            font-weight:700;
+            line-height:1.05;
+            color: #fff;
+            margin:10px 0 0 0;
+        }
+        .subtitle{
+            color: rgba(255,255,255,0.92);
+            opacity:0.95;
+            margin:0;
+            font-weight:500;
+            max-width:380px;
+        }
+        .promo-features{
+            margin-top:18px;
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+        .chip{
+            background: rgba(255,255,255,0.08);
+            color:#fff;
+            padding:8px 12px;
+            border-radius:999px;
+            font-weight:600;
+            font-size:13px;
+            display:inline-flex;
+            gap:8px;
+            align-items:center;
+        }
+
+        /* form side */
+        .form-side{
+            padding:34px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
+        }
+
+        .form-header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            margin-bottom:8px;
+        }
+        .form-header h2{
+            margin:0;
+            font-size:20px;
+            color:var(--plum-700);
+        }
+        .form-header p{
+            margin:0;
+            color:var(--muted);
+            font-size:13px;
+        }
+
+        form{
+            margin-top:12px;
+            display:grid;
+            gap:12px;
+        }
+
+        .row{
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap:12px;
+        }
+
+        label{
+            font-size:13px;
+            color:#24303a;
+            font-weight:600;
+            margin-bottom:6px;
+            display:block;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select{
+            width:100%;
+            padding:12px 14px;
+            border-radius:10px;
+            border:1px solid rgba(10,10,10,0.06);
+            background:#fff;
+            font-size:14px;
+            box-sizing:border-box;
+            transition:box-shadow 160ms, border-color 160ms;
+        }
+
+        input:focus, select:focus{
+            outline:none;
+            border-color: var(--plum-500);
+            box-shadow: 0 6px 18px rgba(142,68,173,0.12);
+        }
+
+        .input-with-icon{
+            position:relative;
+        }
+        .input-with-icon .toggle{
+            position:absolute;
+            right:10px;
+            top:50%;
+            transform:translateY(-50%);
+            background:none;
+            border:none;
+            cursor:pointer;
+            padding:6px;
+            color:var(--muted);
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+        }
+
+        .helper{
+            font-size:12px;
+            color:var(--muted);
+            margin-top:6px;
+        }
+
+        .actions{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            margin-top:6px;
+        }
+
+        .primary-btn{
+            background: linear-gradient(90deg,var(--plum-500),var(--green-400));
+            color:white;
+            border:none;
+            padding:12px 16px;
+            border-radius:10px;
+            font-weight:700;
+            cursor:pointer;
+            box-shadow: 0 8px 18px rgba(46,64,83,0.12);
+            transition:transform 120ms, box-shadow 120ms, opacity 120ms;
+        }
+        .primary-btn:disabled{
+            opacity:0.6;
+            cursor:not-allowed;
+            transform:none;
+            box-shadow:none;
+        }
+        .secondary{
+            background:transparent;
+            border:1px solid rgba(10,10,10,0.06);
+            padding:10px 12px;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        .alt-signup{
+            display:flex;
+            gap:10px;
+            margin-top:6px;
+        }
+        .social-btn{
+            flex:1;
+            padding:10px;
+            border-radius:10px;
+            background: #fff;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            border:1px solid rgba(10,10,10,0.06);
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        .terms{
+            display:flex;
+            gap:8px;
+            align-items:center;
+            font-size:13px;
+            color:var(--muted);
+        }
+
+        .note{
+            margin-top:12px;
+            font-size:13px;
+            color:var(--muted);
+        }
+
+        .pw-strength{
+            height:8px;
+            background:rgba(0,0,0,0.06);
+            border-radius:6px;
+            overflow:hidden;
+            margin-top:8px;
+        }
+        .pw-strength > i{
+            display:block;
+            height:100%;
+            width:0%;
+            background:linear-gradient(90deg,#f97316,#ef4444);
+            transition:width 180ms background 180ms;
+        }
+
+        /* responsive */
+        @media (max-width:980px){
+            .card{ grid-template-columns: 1fr; border-radius:14px; }
+            .brand-side{ order:2; padding:28px; }
+            .form-side{ order:1; padding:22px; }
+        }
+        @media (max-width:520px){
+            .row{ grid-template-columns: 1fr; }
+            .logo .mark{ width:42px; height:42px; font-size:16px; }
+            .title{ font-size:22px; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" role="region" aria-label="Registration card for Maxi Boost">
+
+            <aside class="brand-side" aria-hidden="false">
+                <a class="logo" href="#" aria-label="Maxi Boost home">
+                    <span class="mark" aria-hidden="true">MB</span>
+                    <div>
+                        <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,0.95)">Maxi Boost</div>
+                        <div style="font-size:12px;color:rgba(255,255,255,0.85);margin-top:-3px">Social Media Growth</div>
+                    </div>
+                </a>
+
+                <h1 class="title">Grow faster. Reach further.</h1>
+                <p class="subtitle">Sign up and start boosting your social presence with targeted campaigns, authentic engagement, and real analytics.</p>
+
+                <div class="promo-features" aria-hidden="true">
+                    <span class="chip">Instant Insights</span>
+                    <span class="chip">Safe & Scalable</span>
+                    <span class="chip">Trusted Tools</span>
+                </div>
+
+            </aside>
+
+            <main class="form-side">
+                <div class="form-header">
+                    <div>
+                        <h2>Create your account</h2>
+                        <p>Join Maxi Boost — get more visibility on your channels</p>
+                    </div>
+                    <div style="text-align:right;color:var(--muted);font-size:13px">Already have an account?<br><a href="./login.html" style="color:var(--plum-500);font-weight:700;text-decoration:none">Sign in</a></div>
+                </div>
+
+                <form id="regForm" novalidate>
+                    <div class="row">
+                        <div>
+                            <label for="fullname">Full name</label>
+                            <input id="fullname" name="fullname" type="text" placeholder="Alexandra Doe" required autocomplete="name">
+                        </div>
+                        <div>
+                            <label for="username">Username</label>
+                            <input id="username" name="username" type="text" placeholder="maxi_alex" required autocomplete="username">
+                        </div>
+                    </div>
+
+                  
+
+                    <div class="row">
+                        <div>
+                            <label for="password">Password</label>
+                            <div class="input-with-icon">
+                                <input id="password" name="password" type="password" placeholder="Create a strong password" minlength="8" required autocomplete="new-password" aria-describedby="pwHelp">
+                                <button type="button" class="toggle" id="togglePw" aria-label="Show password">👁️</button>
+                            </div>
+                            <div class="pw-strength" aria-hidden="true"><i id="pwBar"></i></div>
+                            <div id="pwHelp" class="helper">At least 8 characters. Use letters, numbers & symbols.</div>
+                        </div>
+                        <div>
+                            <label for="confirm">Confirm password</label>
+                            <input id="confirm" name="confirm" type="password" placeholder="Re-enter password" minlength="8" required autocomplete="new-password">
+                        </div>
+                    </div>
+
+                    <div class="actions" style="margin-top:6px">
+                        <div style="display:flex;flex-direction:column;">
+                            <div class="terms">
+                                <input id="agree" type="checkbox" required aria-required="true">
+                                <label for="agree" style="font-weight:600;color:var(--muted);margin:0">I agree to the <a href="#" style="color:var(--plum-500);text-decoration:none">Terms & Privacy</a></label>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <button type="submit" class="primary-btn" id="submitBtn">Create account</button>
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="note" style="margin-top:14px">By creating an account you agree to receive product updates and offers. You can unsubscribe anytime.</div>
+                </form>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Minimal client-side interactivity & validation
+        const pw = document.getElementById('password');
+        const confirmPw = document.getElementById('confirm');
+        const toggle = document.getElementById('togglePw');
+        const pwBar = document.getElementById('pwBar');
+        const form = document.getElementById('regForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function scorePassword(s){
+            let score = 0;
+            if (!s) return 0;
+            // length
+            score += Math.min(10, s.length) * 2;
+            // variety
+            if (/[A-Z]/.test(s)) score += 10;
+            if (/[a-z]/.test(s)) score += 10;
+            if (/[0-9]/.test(s)) score += 10;
+            if (/[^A-Za-z0-9]/.test(s)) score += 10;
+            return Math.min(100, score);
+        }
+
+        pw.addEventListener('input', () => {
+            const sc = scorePassword(pw.value);
+            pwBar.style.width = sc + '%';
+            if (sc < 40) pwBar.style.background = 'linear-gradient(90deg,#f97316,#ef4444)';
+            else if (sc < 75) pwBar.style.background = 'linear-gradient(90deg,#f59e0b,#f97316)';
+            else pwBar.style.background = 'linear-gradient(90deg,#10b981,#06b6d4)';
+        });
+
+        toggle.addEventListener('click', () => {
+            const t = pw.type === 'password' ? 'text' : 'password';
+            pw.type = t;
+            toggle.textContent = t === 'text' ? '🙈' : '👁️';
+            toggle.setAttribute('aria-pressed', t === 'text');
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // Basic validation
+            const agree = document.getElementById('agree');
+            const fullnameInput = document.getElementById('fullname');
+            const usernameInput = document.getElementById('username');
+            const confirmInput = document.getElementById('confirm');
+
+            if (pw.value.length < 8){
+                alert('Password must be at least 8 characters.');
+                pw.focus();
+                return;
+            }
+            if (pw.value !== confirmPw.value){
+                alert('Passwords do not match.');
+                confirmPw.focus();
+                return;
+            }
+            if (!agree.checked){
+                alert('You must accept Terms & Privacy to continue.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
+
+            try {
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        fullname: fullnameInput.value,
+                        username: usernameInput.value,
+                        password: pw.value
+                    })
+                });
+                const data = await res.json();
+                alert(data.message || 'Done');
+                if (res.ok) {
+                    window.location.href = 'login.html';
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create account';
+                }
+            } catch (err) {
+                alert('Registration failed. Try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create account';
+            }
+        });
+
+      
+    </script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Payment Confirmation</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        :root{
+            --bg:#f4f7fb; --card:#fff; --accent:#2f8cff; --danger:#e24b4b; --success:#28a745;
+        }
+        body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111;background:var(--bg);display:flex;align-items:center;justify-content:center;height:100vh}
+        .wrap{width:380px;background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(17,24,39,.08);padding:20px}
+        h1{font-size:18px;margin:0 0 12px}
+        .account{background:#fafcff;border:1px solid #eef4ff;padding:12px;border-radius:8px;margin-bottom:14px}
+        .row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+        .muted{color:#6b7280;font-size:13px}
+        button{appearance:none;border:0;padding:10px 14px;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
+        button.secondary{background:#eef2ff;color:var(--accent);border:1px solid #d8e6ff}
+        /* modal */
+        .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;padding:20px}
+        .modal{width:100%;max-width:560px;background:var(--card);border-radius:12px;padding:18px;box-shadow:0 12px 50px rgba(2,6,23,.35)}
+        .modal h2{margin:0 0 10px;font-size:16px}
+        .upload-area{border:2px dashed #e6eefc;border-radius:10px;padding:16px;text-align:center;background:#fbfdff}
+        input[type=file]{display:none}
+        .preview{margin-top:12px;display:flex;gap:12px;align-items:center}
+        img.preview-img{max-width:140px;border-radius:8px;object-fit:cover;border:1px solid #e6eefc}
+        .file-info{flex:1;font-size:13px;color:#111}
+        .progress{height:8px;background:#eef2ff;border-radius:6px;overflow:hidden;margin-top:8px}
+        .progress > b{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#6fb8ff);width:0%}
+        .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+        .hint{font-size:13px;color:#6b7280;margin-top:8px}
+        /* result screens */
+        .result{display:none;padding:20px;text-align:center}
+        .check{width:120px;height:120px;margin:0 auto 12px;position:relative}
+        .circle{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--success),transparent 40%);filter:blur(10px);opacity:0}
+        .tick{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;color:var(--success);transform:scale(0);transition:transform .4s cubic-bezier(.2,.9,.3,1)}
+        .confetti{position:absolute;inset:0;pointer-events:none}
+        .fail{color:var(--danger)}
+        .show{display:block}
+        /* simple animation triggers */
+        .animate .circle{animation:glow .9s ease forwards}
+        .animate .tick{transform:scale(1)}
+        @keyframes glow{0%{opacity:.0;transform:scale(.6)}50%{opacity:.9;transform:scale(1.05)}100%{opacity:.55;transform:scale(1)}}
+        /* small responsive */
+        @media (max-width:420px){.wrap{width:95%}}
+    </style>
+</head>
+<body>
+    <div class="wrap" role="main">
+        <h1>Account to pay</h1>
+        <div class="account" aria-labelledby="acc">
+            <div class="row"><span class="muted">Name</span><strong>Monipoint</strong></div>
+            <div class="row"><span class="muted">Account</span><strong>5746441372</strong></div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:space-between">
+            <button id="paidBtn">I've paid</button>
+            <button class="secondary" id="helpBtn">Need help</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" id="modal" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <h2 id="modalTitle">Upload transfer receipt</h2>
+
+            <div class="upload-area" id="uploadArea">
+                <label for="fileInput" style="cursor:pointer">
+                    <div style="font-weight:600;color:#111">Select receipt image or text</div>
+                    <div class="hint">Bank transfer screenshots, PDFs not supported here. Try an image or a .txt file.</div>
+                </label>
+                <input id="fileInput" type="file" accept="image/*,text/plain" />
+                <div class="preview" id="preview"></div>
+                <div class="progress" id="progWrap" style="display:none"><b id="progBar"></b></div>
+            </div>
+
+            <div class="actions">
+                <button class="secondary" id="cancelBtn">Cancel</button>
+                <button id="submitBtn">Submit</button>
+            </div>
+
+            <div class="hint" id="ocrHint">OCR progress: <span id="ocrProgress">0%</span></div>
+
+            <!-- Result views -->
+            <div class="result" id="success">
+                <div class="check" id="checkWrap">
+                    <div class="circle"></div>
+                    <div class="tick">✓</div>
+                    <canvas class="confetti" id="confetti"></canvas>
+                </div>
+                <h3>Payment confirmed</h3>
+                <p class="muted">We detected a valid transfer receipt. Thank you!</p>
+                <div style="margin-top:12px"><button id="closeSuccess">Close</button></div>
+            </div>
+
+            <div class="result" id="failure">
+                <div style="font-size:44px;color:var(--danger);margin-bottom:6px">✖</div>
+                <h3 class="fail">No transfer detected</h3>
+                <p class="muted">We couldn't find transfer details in the uploaded file. Please make the real payment and upload a correct receipt.</p>
+                <div style="margin-top:12px"><button id="closeFail">Close</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tesseract.js from CDN -->
+    <script src="https://unpkg.com/tesseract.js@v4.0.2/dist/tesseract.min.js"></script>
+    <script>
+        // Elements
+        const modal = document.getElementById('modal');
+        const paidBtn = document.getElementById('paidBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const progWrap = document.getElementById('progWrap');
+        const progBar = document.getElementById('progBar');
+        const ocrProgress = document.getElementById('ocrProgress');
+        const successView = document.getElementById('success');
+        const failView = document.getElementById('failure');
+        const closeSuccess = document.getElementById('closeSuccess');
+        const closeFail = document.getElementById('closeFail');
+        const checkWrap = document.getElementById('checkWrap');
+        const confettiCanvas = document.getElementById('confetti');
+
+        let selectedFile = null;
+
+        paidBtn.addEventListener('click', openModal);
+        cancelBtn.addEventListener('click', closeModal);
+        closeSuccess.addEventListener('click', closeAll);
+        closeFail.addEventListener('click', closeModal);
+        document.getElementById('helpBtn').addEventListener('click', ()=> alert('Contact support: support@example.com'));
+
+        fileInput.addEventListener('change', e=>{
+            selectedFile = e.target.files[0];
+            preview.innerHTML = '';
+            if(!selectedFile) return;
+            if(selectedFile.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.className = 'preview-img';
+                img.alt = 'receipt preview';
+                img.src = URL.createObjectURL(selectedFile);
+                preview.appendChild(img);
+            } else if (selectedFile.type.startsWith('text/') || selectedFile.name.endsWith('.txt')) {
+                const info = document.createElement('div');
+                info.className = 'file-info';
+                info.textContent = selectedFile.name + ' (text file)';
+                preview.appendChild(info);
+            } else {
+                const info = document.createElement('div');
+                info.className = 'file-info';
+                info.textContent = 'Selected: ' + selectedFile.name;
+                preview.appendChild(info);
+            }
+        });
+
+        submitBtn.addEventListener('click', async ()=>{
+            if(!selectedFile){ alert('Please select a file first'); return;}
+            // Reset UI
+            successView.classList.remove('show');
+            failView.classList.remove('show');
+            progWrap.style.display = 'block';
+            progBar.style.width = '0%';
+            ocrProgress.textContent = '0%';
+
+            try{
+                let text = '';
+                if(selectedFile.type.startsWith('text/') || selectedFile.name.endsWith('.txt')){
+                    text = await selectedFile.text();
+                } else if (selectedFile.type.startsWith('image/')){
+                    // use Tesseract OCR
+                    const worker = Tesseract.createWorker({
+                        logger: m => {
+                            if(m.status === 'recognizing text' && m.progress){
+                                const pct = Math.round(m.progress*100);
+                                progBar.style.width = pct + '%';
+                                ocrProgress.textContent = pct + '%';
+                            }
+                        }
+                    });
+                    await worker.load();
+                    await worker.loadLanguage('eng');
+                    await worker.initialize('eng');
+                    const { data: { text: ocrText } } = await worker.recognize(selectedFile);
+                    text = ocrText || '';
+                    await worker.terminate();
+                } else {
+                    // unknown binary: try to read as data URL and OCR as fallback
+                    const reader = new FileReader();
+                    text = await new Promise((res,rej)=>{
+                        reader.onload = ()=> res('');
+                        reader.onerror = ()=> res('');
+                        reader.readAsDataURL(selectedFile);
+                    });
+                }
+
+                ocrProgress.textContent = '100%';
+                progBar.style.width = '100%';
+
+                const valid = analyzeTextForTransfer(text);
+                if(valid){
+                    showSuccess();
+                } else {
+                    showFailure();
+                }
+
+            }catch(err){
+                console.error(err);
+                showFailure();
+            }
+        });
+
+        function openModal(){
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden','false');
+            // reset
+            preview.innerHTML = '';
+            fileInput.value = '';
+            selectedFile = null;
+            progWrap.style.display = 'none';
+            ocrProgress.textContent = '0%';
+            progBar.style.width = '0%';
+            successView.classList.remove('show');
+            failView.classList.remove('show');
+        }
+        function closeModal(){
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden','true');
+        }
+        function closeAll(){
+            // close and maybe mark paid in UI (demo)
+            closeModal();
+            // Show small confirmation in main UI (simple)
+            paidBtn.textContent = "Payment submitted";
+            paidBtn.disabled = true;
+            paidBtn.style.opacity = .7;
+        }
+
+        function showSuccess(){
+            successView.classList.add('show');
+            failView.classList.remove('show');
+            // animate check
+            checkWrap.parentElement.classList.add('animate');
+            runConfetti();
+        }
+        function showFailure(){
+            failView.classList.add('show');
+            successView.classList.remove('show');
+        }
+
+        // Basic text analysis to detect money transfer receipts
+        function analyzeTextForTransfer(txt){
+            if(!txt) return false;
+            const s = txt.toLowerCase();
+            // keywords and patterns
+            const transferKeywords = ['transfer','transaction','credited','credited to','debit','utr','reference','transaction id','txn','imps','rtgs','upi','payment to','paid to','bank transfer','beneficiary','amount','receipt','amount paid','amount transferred'];
+            const moneyPattern = /(\b(?:€|\$|£|₹)\s?\d+(\.\d{1,2})?\b)|\b\d{1,3}(?:,\d{3})*(?:\.\d{1,2})?\s?(?:eur|usd|gbp|inr)\b/;
+            const hasMoney = moneyPattern.test(s) || /\bamount\b/.test(s) || /\bcredited\b/.test(s);
+            const hasTransfer = transferKeywords.some(k => s.includes(k));
+            // require at least one transfer-like term AND a money mention
+            return hasTransfer && hasMoney;
+        }
+
+        // Simple confetti (canvas) - small, lightweight
+        function runConfetti(){
+            const ctx = confettiCanvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            confettiCanvas.width = confettiCanvas.clientWidth * dpr || 300*dpr;
+            confettiCanvas.height = confettiCanvas.clientHeight * dpr || 120*dpr;
+            ctx.scale(dpr,dpr);
+            const w = confettiCanvas.width / dpr;
+            const h = confettiCanvas.height / dpr;
+            const pieces = [];
+            for(let i=0;i<30;i++){
+                pieces.push({
+                    x: Math.random()*w,
+                    y: Math.random()*h - h,
+                    r: (Math.random()*6)+4,
+                    c: ['#FFD166','#06D6A0','#118AB2','#EF476F'][Math.floor(Math.random()*4)],
+                    vx: (Math.random()-0.5)*2,
+                    vy: Math.random()*3+2,
+                    rot: Math.random()*360
+                });
+            }
+            let t0 = null;
+            function frame(t){
+                if(!t0) t0 = t;
+                const elapsed = t - t0;
+                ctx.clearRect(0,0,w,h);
+                pieces.forEach(p=>{
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.rot += p.vx*5;
+                    ctx.save();
+                    ctx.translate(p.x,p.y);
+                    ctx.rotate(p.rot*Math.PI/180);
+                    ctx.fillStyle = p.c;
+                    ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);
+                    ctx.restore();
+                });
+                if(elapsed < 2500) requestAnimationFrame(frame);
+                else ctx.clearRect(0,0,w,h);
+            }
+            requestAnimationFrame(frame);
+        }
+    </script>
+</body>
+</html>

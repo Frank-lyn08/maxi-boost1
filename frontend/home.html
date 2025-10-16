@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maxi Boost — Welcome</title>
+    <style>
+        :root{
+            --bg:#f6f8fb; --card:#fff; --accent:#0b5cff; --muted:#6b7280;
+            --glass: rgba(255,255,255,0.8);
+        }
+        html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
+        body{background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);display:flex;align-items:flex-start;justify-content:center;padding:40px;}
+        .shell{width:100%;max-width:1100px;}
+        header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+        .brand{display:flex;align-items:center;gap:12px}
+        .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#0b5cff,#6a4eff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px;box-shadow:0 8px 24px rgba(11,92,255,0.12)}
+        h1{margin:0;font-size:20px}
+        p.lead{margin:0;color:var(--muted);font-size:14px}
+
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:18px}
+        .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 4px 10px rgba(2,6,23,0.06);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease;display:flex;flex-direction:column;gap:10px}
+        .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.10)}
+        .card .plat{display:flex;align-items:center;gap:12px}
+        .icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
+        .facebook{background:#1877f2} .instagram{background:linear-gradient(45deg,#feda75,#d62976)} .youtube{background:#ff0000} .x{background:#000} .linkedin{background:#0077b5} .tiktok{background:linear-gradient(45deg,#25f4ee,#fe2c55)}
+        .card small{color:var(--muted);font-size:13px}
+
+        /* modal */
+        .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:60}
+        .modal{width:100%;max-width:680px;background:var(--glass);backdrop-filter:blur(6px);padding:18px;border-radius:12px;box-shadow:0 20px 50px rgba(2,6,23,0.25)}
+        .modal h2{margin:0 0 6px 0}
+        .close{border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--muted)}
+        .options{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+        .row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:rgba(255,255,255,0.6)}
+        .row input[type="number"]{width:110px;padding:8px;border-radius:8px;border:1px solid #e5e7eb;background:#fff}
+        .row label{flex:1;display:flex;flex-direction:column;font-size:14px}
+        .price{font-weight:600;color:#111}
+        .summary{margin-top:12px;padding:10px;border-radius:10px;background:#fff;display:flex;justify-content:space-between;align-items:center}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;background:var(--accent);color:#fff;font-weight:600;text-decoration:none}
+        .muted{color:var(--muted);font-size:13px}
+        .breakdown{font-size:13px;color:#111}
+        @media (max-width:520px){.row{flex-direction:column;align-items:flex-start}.row input[type="number"]{width:100%}}
+    </style>
+</head>
+<body>
+    <main class="shell">
+        <header>
+            <div class="brand">
+                <div class="logo">MB</div>
+                <div>
+                    <h1>Maxi Boost</h1>
+                    <p class="lead">Boost your social presence — choose a service to start</p>
+                </div>
+            </div>
+            <div style="margin-left:auto;text-align:right">
+                <div class="muted">Quick info</div>
+                <div class="muted" style="font-weight:600">1 follower = ₦1.5, like = ₦0.50, comment = ₦0.80</div>
+            </div>
+        </header>
+
+        <section class="grid" id="services">
+            <!-- Cards -->
+            <div class="card" data-platform="Facebook">
+                <div class="plat"><div class="icon facebook">f</div><div><strong>Facebook</strong><div class="muted">Boost followers, likes & comments</div></div></div>
+                <small class="muted">Popular for pages & profiles</small>
+            </div>
+
+            <div class="card" data-platform="Instagram">
+                <div class="plat"><div class="icon instagram">ig</div><div><strong>Instagram</strong><div class="muted">Stories, posts & reels</div></div></div>
+                <small class="muted">High engagement</small>
+            </div>
+
+            <div class="card" data-platform="YouTube">
+                <div class="plat"><div class="icon youtube">yt</div><div><strong>YouTube</strong><div class="muted">Subscribers & likes</div></div></div>
+                <small class="muted">Grow your channel</small>
+            </div>
+
+            <div class="card" data-platform="X">
+                <div class="plat"><div class="icon x">x</div><div><strong>X (Twitter)</strong><div class="muted">Tweets & followers</div></div></div>
+                <small class="muted">Real-time reach</small>
+            </div>
+
+            <div class="card" data-platform="LinkedIn">
+                <div class="plat"><div class="icon linkedin">in</div><div><strong>LinkedIn</strong><div class="muted">Professional audience</div></div></div>
+                <small class="muted">B2B & professionals</small>
+            </div>
+
+            <div class="card" data-platform="TikTok">
+                <div class="plat"><div class="icon tiktok">tt</div><div><strong>TikTok</strong><div class="muted">Viral short videos</div></div></div>
+                <small class="muted">Fast growth</small>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div>
+                    <h2 id="modalTitle">Boost</h2>
+                    <div class="muted" id="modalPlatform">Select options</div>
+                </div>
+                <div style="display:flex;gap:8px">
+                    <button class="close" id="modalClose" aria-label="Close">&times;</button>
+                </div>
+            </div>
+
+            <div class="options" id="optionsList">
+                <div class="row">
+                    <input type="checkbox" id="optFollowers" checked>
+                    <label for="optFollowers">
+                        <span>Followers <small class="muted"> (per unit ₦1.5)</small></span>
+                        <input type="number" id="qtyFollowers" min="0" step="1" value="10" aria-label="Followers quantity">
+                    </label>
+                    <div class="price" id="subFollowers">₦0</div>
+                </div>
+
+                <div class="row">
+                    <input type="checkbox" id="optLikes" checked>
+                    <label for="optLikes">
+                        <span>Likes <small class="muted"> (per unit ₦0.50)</small></span>
+                        <input type="number" id="qtyLikes" min="0" step="1" value="20" aria-label="Likes quantity">
+                    </label>
+                    <div class="price" id="subLikes">₦0</div>
+                </div>
+
+                <div class="row">
+                    <input type="checkbox" id="optComments" checked>
+                    <label for="optComments">
+                        <span>Comments <small class="muted"> (per unit ₦0.80)</small></span>
+                        <input type="number" id="qtyComments" min="0" step="1" value="5" aria-label="Comments quantity">
+                    </label>
+                    <div class="price" id="subComments">₦0</div>
+                </div>
+            </div>
+
+            <div class="summary" id="summary">
+                <div>
+                    <div class="breakdown" id="orderBreak">Order total</div>
+                    <div class="muted" style="font-size:13px">Review your selection before transfer</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-size:18px;font-weight:700" id="orderTotal">₦0</div>
+                    <a class="btn" href="./payment.html">Transfer Direct</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Prices
+        const PRICES = { followers:1.5, likes:0.50, comments:0.80 };
+
+        // Elements
+        const cards = document.querySelectorAll('.card');
+        const backdrop = document.getElementById('modalBackdrop');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPlatform = document.getElementById('modalPlatform');
+        const closeBtn = document.getElementById('modalClose');
+
+        const optFollowers = document.getElementById('optFollowers');
+        const optLikes = document.getElementById('optLikes');
+        const optComments = document.getElementById('optComments');
+
+        const qtyFollowers = document.getElementById('qtyFollowers');
+        const qtyLikes = document.getElementById('qtyLikes');
+        const qtyComments = document.getElementById('qtyComments');
+
+        const subFollowers = document.getElementById('subFollowers');
+        const subLikes = document.getElementById('subLikes');
+        const subComments = document.getElementById('subComments');
+
+        const orderTotal = document.getElementById('orderTotal');
+        const orderBreak = document.getElementById('orderBreak');
+        const transferLink = document.getElementById('transferLink');
+
+        let currentPlatform = '';
+
+        // Utility
+        function fmt(n){ return '₦' + Number(n).toLocaleString(); }
+        function clampInt(v){ v = parseInt(v||0,10); return isNaN(v) || v < 0 ? 0 : v; }
+
+        function updateSubtotals(){
+            const f = clampInt(qtyFollowers.value) * PRICES.followers * (optFollowers.checked ? 1:0);
+            const l = clampInt(qtyLikes.value) * PRICES.likes * (optLikes.checked ? 1:0);
+            const c = clampInt(qtyComments.value) * PRICES.comments * (optComments.checked ? 1:0);
+
+            subFollowers.textContent = fmt(f);
+            subLikes.textContent = fmt(l);
+            subComments.textContent = fmt(c);
+
+            const total = f + l + c;
+            orderTotal.textContent = fmt(total);
+
+            // breakdown text for transfer link or summary
+            const breakdownParts = [];
+            if(optFollowers.checked && clampInt(qtyFollowers.value)>0) breakdownParts.push(`${clampInt(qtyFollowers.value)} followers`);
+            if(optLikes.checked && clampInt(qtyLikes.value)>0) breakdownParts.push(`${clampInt(qtyLikes.value)} likes`);
+            if(optComments.checked && clampInt(qtyComments.value)>0) breakdownParts.push(`${clampInt(qtyComments.value)} comments`);
+
+            orderBreak.textContent = breakdownParts.length ? breakdownParts.join(' · ') : 'No items selected';
+
+           
+        }
+
+        // Events to recalc
+        [optFollowers,optLikes,optComments,qtyFollowers,qtyLikes,qtyComments].forEach(el=>{
+            el.addEventListener('input', updateSubtotals);
+            el.addEventListener('change', updateSubtotals);
+        });
+
+        // Open modal with platform context
+        cards.forEach(card=>{
+            card.addEventListener('click', ()=>{
+                currentPlatform = card.dataset.platform || '';
+                modalTitle.textContent = `Boost ${currentPlatform}`;
+                modalPlatform.textContent = `Service: ${currentPlatform}`;
+                // reset defaults (optional)
+                // qtyFollowers.value = 10; qtyLikes.value = 20; qtyComments.value = 5;
+                backdrop.style.display = 'flex';
+                backdrop.setAttribute('aria-hidden','false');
+                updateSubtotals();
+            });
+        });
+
+        // Close handlers
+        closeBtn.addEventListener('click', ()=>{ backdrop.style.display='none'; backdrop.setAttribute('aria-hidden','true'); });
+        backdrop.addEventListener('click', (e)=>{
+            if(e.target === backdrop) { backdrop.style.display='none'; backdrop.setAttribute('aria-hidden','true'); }
+        });
+        document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ backdrop.style.display='none'; backdrop.setAttribute('aria-hidden','true'); } });
+
+        // Ensure enabling/disabling qty inputs with checkbox
+        function toggleInput(checkbox, input){
+            input.disabled = !checkbox.checked;
+            input.style.opacity = checkbox.checked ? '1' : '0.6';
+        }
+        [ [optFollowers, qtyFollowers], [optLikes, qtyLikes], [optComments, qtyComments] ].forEach(pair=>{
+            const [chk, inp] = pair;
+            chk.addEventListener('change', ()=>{ toggleInput(chk, inp); updateSubtotals(); });
+            // init
+            toggleInput(chk, inp);
+        });
+
+        // initial update
+        updateSubtotals();
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+// const express = require('express');
+// const fs = require('fs');
+// const path = require('path');
+// const crypto = require('crypto');
+
+// const app = express();
+// const PORT = process.env.PORT || 3000;
+
+// // Simple in-memory sessions (maps sessionId -> email)
+// const sessions = new Map();
+
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+
+// // Serve static HTML files from project root
+
+// app.use(express.static(path.join(__dirname, '../frontend')));
+
+// const USERS_FILE = path.join(__dirname, 'users.json');
+
+// function readUsers() {
+//   try {
+//     const raw = fs.readFileSync(USERS_FILE, 'utf8');
+//     return JSON.parse(raw || '[]');
+//   } catch (err) {
+//     return [];
+//   }
+// }
+
+// function writeUsers(users) {
+//   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
+// }
+
+// function hashPassword(password, salt) {
+//   return crypto.createHmac('sha256', salt).update(password).digest('hex');
+// }
+
+// // POST /register - handle registration form from reg.html
+// app.post('/register', (req, res) => {
+//   const { fullname, username, password } = req.body;
+
+//   if (!fullname || !username || !password) {
+//     // If request came from fetch (JSON) respond with JSON, otherwise redirect
+//     if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//       return res.status(400).json({ message: 'Missing fields' });
+//     }
+//     return res.redirect('/reg.html');
+//   }
+
+//   const users = readUsers();
+//   const exists = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+//   if (exists) {
+//     if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//       return res.status(409).json({ message: 'User exists' });
+//     }
+//     return res.redirect('/reg.html');
+//   }
+
+//   const salt = crypto.randomBytes(16).toString('hex');
+//   const hashed = hashPassword(password, salt);
+
+//   const newUser = {
+//     id: crypto.randomUUID(),
+//     name: fullname,
+//     username,
+//     password: hashed,
+//     salt,
+//     createdAt: new Date().toISOString()
+//   };
+
+//   users.push(newUser);
+//   try {
+//     writeUsers(users);
+//   } catch (err) {
+//     console.error('Failed to write users.json', err);
+//     if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//       return res.status(500).json({ message: 'Failed to save user' });
+//     }
+//     return res.redirect('/reg.html');
+//   }
+
+//   if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//     return res.json({ message: 'Registration successful' });
+//   }
+//   return res.redirect('/login.html');
+// });
+
+// // POST /login - handle login form from login.html
+// app.post('/login', (req, res) => {
+//   const { username, password } = req.body;
+//   if (!username || !password) {
+//     if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//       return res.status(400).json({ message: 'Missing credentials' });
+//     }
+//     return res.redirect('/reg.html');
+//   }
+
+//   const users = readUsers();
+//   const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+//   if (!user) {
+//     if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//       return res.status(401).json({ message: 'Invalid credentials' });
+//     }
+//     return res.redirect('/reg.html');
+//   }
+
+//   const hashed = hashPassword(password, user.salt);
+//   if (hashed !== user.password) {
+//     if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//       return res.status(401).json({ message: 'Invalid credentials' });
+//     }
+//     return res.redirect('/reg.html');
+//   }
+
+//   // Create a session id and set cookie
+//   const sessionId = crypto.randomBytes(24).toString('hex');
+//   sessions.set(sessionId, { username: user.username, name: user.name });
+
+//   // Cookie expires in 1 hour
+//   res.cookie = `session=${sessionId}; HttpOnly; Max-Age=${60 * 60}; Path=/`;
+//   res.setHeader('Set-Cookie', res.cookie);
+
+//   if (req.headers.accept && req.headers.accept.includes('application/json')) {
+//     return res.json({ message: 'Login successful' });
+//   }
+//   return res.redirect('/home.html');
+// });
+
+// // Simple middleware to check session cookie
+// app.get('/me', (req, res) => {
+//   const cookie = req.headers.cookie || '';
+//   const match = cookie.match(/session=([a-f0-9]+)/);
+//   if (!match) return res.status(401).json({ error: 'Not logged in' });
+//   const sessionId = match[1];
+//   const s = sessions.get(sessionId);
+//   if (!s) return res.status(401).json({ error: 'Not logged in' });
+//   return res.json({ email: s.email, name: s.name });
+// });
+
+// // Logout route
+// app.post('/logout', (req, res) => {
+//   const cookie = req.headers.cookie || '';
+//   const match = cookie.match(/session=([a-f0-9]+)/);
+//   if (match) {
+//     sessions.delete(match[1]);
+//   }
+//   res.setHeader('Set-Cookie', `session=; HttpOnly; Max-Age=0; Path=/`);
+//   return res.redirect('/login.html');
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// });

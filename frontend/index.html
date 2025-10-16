@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>maxiboost — Social Media Growth, Fast & Smart</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-hNsK7T8dQ2o0q9F+q8x6a3QG2Yk6oZkqg0hNf3DqzOq9wz3bM1n2wI8b0JYkJ3Y6f7w3F8y1p3gF4d7vH7JQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root{
+            --plum-700:#6f2e7a;
+            --plum-500:#8e44ad;
+            --green-700:#1f8f57;
+            --green-400:#19d167;
+            --bg:#0f1724;
+            --glass: rgba(255,255,255,0.06);
+            --muted: rgba(255,255,255,0.75);
+            --card-shadow: 0 10px 30px rgba(11,15,25,0.6);
+            --radius: 14px;
+            color-scheme: dark;
+        }
+
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(160deg, rgba(18,16,30,1) 0%, rgba(12,14,20,1) 30%), radial-gradient(circle at 10% 10%, rgba(142,68,173,0.08), transparent 10%), radial-gradient(circle at 90% 90%, rgba(25,209,103,0.06), transparent 10%);
+            color:#fff;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            padding:32px;
+        }
+
+        /* Top nav */
+        .nav{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:16px;
+            max-width:1200px;
+            margin:0 auto 28px;
+        }
+        .brand{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            text-decoration:none;
+            color:inherit;
+        }
+        .logo{
+            width:52px;
+            height:52px;
+            border-radius:12px;
+            background: linear-gradient(135deg,var(--green-400),var(--plum-500));
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow: 0 6px 20px rgba(18,16,30,0.6), inset 0 -6px 18px rgba(255,255,255,0.04);
+            font-weight:700;
+            font-family:'Montserrat', sans-serif;
+            font-size:18px;
+            letter-spacing:0.6px;
+        }
+        .brand h1{
+            margin:0;
+            font-size:18px;
+            line-height:1;
+            font-family:'Montserrat', sans-serif;
+        }
+        .brand h1 .accent-boost{ color:var(--plum-500) }
+        .brand h1 .accent-maxi{ color:var(--green-400) }
+
+        .nav-actions{
+            display:flex;
+            gap:12px;
+            align-items:center;
+        }
+        .btn{
+            appearance:none;
+            border:0;
+            padding:10px 16px;
+            cursor:pointer;
+            border-radius:10px;
+            font-weight:600;
+            background:var(--glass);
+            color:var(--muted);
+            backdrop-filter: blur(6px);
+            transition:all .22s ease;
+            box-shadow: 0 4px 18px rgba(7,10,20,0.5);
+        }
+        .btn:hover{ transform:translateY(-3px); box-shadow:0 10px 30px rgba(7,10,20,0.6) }
+        .btn-primary{
+            background: linear-gradient(90deg,var(--green-400),var(--plum-500));
+            color: white;
+            padding:12px 20px;
+            box-shadow: 0 12px 30px rgba(34,24,50,0.45);
+        }
+
+        /* Hero */
+        .hero{
+            max-width:1200px;
+            margin:0 auto;
+            display:grid;
+            grid-template-columns: 1fr 460px;
+            gap:34px;
+            align-items:center;
+            min-height:72vh;
+        }
+        .hero-left{
+            padding:28px;
+        }
+        .eyebrow{
+            display:inline-flex;
+            gap:10px;
+            align-items:center;
+            background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            padding:8px 12px;
+            border-radius:999px;
+            color:var(--muted);
+            font-weight:600;
+            font-size:13px;
+            margin-bottom:18px;
+            width:max-content;
+        }
+        .eyebrow .dot{
+            width:8px;height:8px;border-radius:50%;
+            background: linear-gradient(135deg,var(--green-400),var(--plum-500));
+            box-shadow:0 6px 18px rgba(142,68,173,0.12), 0 6px 18px rgba(25,209,103,0.06);
+        }
+        h2{
+            margin:6px 0 12px;
+            font-family:'Montserrat', sans-serif;
+            font-size:clamp(28px, 4.6vw, 44px);
+            line-height:1.03;
+            letter-spacing:-0.6px;
+            color:linear-gradient(90deg,var(--green-400),var(--plum-500));
+        }
+        .lead{
+            color:rgba(255,255,255,0.85);
+            font-size:16px;
+            max-width:62ch;
+            margin-bottom:20px;
+            line-height:1.6;
+        }
+        .cta-row{ display:flex; gap:12px; align-items:center; margin-bottom:22px; flex-wrap:wrap }
+        .metric{
+            display:flex; gap:10px; align-items:center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            padding:10px 14px;
+            border-radius:12px;
+            font-weight:600;
+            color:var(--muted);
+            font-size:14px;
+        }
+        .stat{
+            color:white;
+            font-weight:800;
+            font-size:20px;
+            margin-right:6px;
+            background:linear-gradient(90deg,var(--green-400),var(--plum-500));
+            -webkit-background-clip:text; background-clip:text; color: transparent;
+        }
+
+        /* Mockup card */
+        .mockup{
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            border-radius: var(--radius);
+            padding:18px;
+            box-shadow: var(--card-shadow);
+            position:relative;
+            overflow:hidden;
+            transform:translateZ(0);
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float{
+            0%{ transform: translateY(0) }
+            50%{ transform: translateY(-8px) }
+            100%{ transform: translateY(0) }
+        }
+        .mock-top{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-bottom:14px;
+        }
+        .mock-pill{
+            display:flex; gap:8px; align-items:center;
+            background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:999px;
+            font-weight:600; color:var(--muted); font-size:13px;
+        }
+        .mock-content{
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border-radius:12px;
+            padding:12px;
+        }
+        .card-row{
+            display:flex; gap:12px; align-items:center; justify-content:space-between;
+            margin-bottom:10px;
+        }
+        .profile{
+            display:flex; gap:12px; align-items:center;
+        }
+        .avatar{
+            width:48px;height:48px;border-radius:10px;
+            background: linear-gradient(135deg,var(--plum-500),var(--green-400));
+            display:flex; align-items:center; justify-content:center;
+            font-weight:700; font-size:18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        }
+        .small{
+            font-size:13px; color:var(--muted); font-weight:600;
+        }
+        .big{
+            font-weight:800; font-size:18px; color:white;
+        }
+        .progress{
+            height:10px; border-radius:999px; background:rgba(255,255,255,0.04);
+            overflow:hidden;
+        }
+        .progress > i{
+            display:block; height:100%; width:64%;
+            background: linear-gradient(90deg,var(--green-400),var(--plum-500));
+        }
+
+        /* features */
+        .features{
+            display:flex;
+            gap:14px;
+            margin-top:28px;
+            flex-wrap:wrap;
+        }
+        .feature{
+            background: rgba(255,255,255,0.02);
+            padding:12px 14px;
+            border-radius:12px;
+            display:flex; gap:12px; align-items:center;
+            min-width:170px;
+        }
+        .feature .fa{
+            font-size:18px;
+            width:36px; height:36px; border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            background: linear-gradient(135deg,var(--green-400),var(--plum-500));
+            color:white;
+        }
+        .feature p{ margin:0; font-size:13px; color:var(--muted); font-weight:600 }
+
+        /* footer small */
+        .hero-footer{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top:26px;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+        .socials a{
+            color:var(--muted);
+            margin-left:12px;
+            text-decoration:none;
+            font-size:18px;
+        }
+
+        /* Responsive */
+        @media (max-width:980px){
+            .hero{ grid-template-columns:1fr; gap:20px; padding:0 6px }
+            .mockup{ order: -1 }
+            .nav{ padding-bottom:10px }
+        }
+        @media (max-width:520px){
+            body{ padding:20px }
+            .logo{ width:44px; height:44px; font-size:16px }
+            .eyebrow{ font-size:12px; padding:6px 10px }
+            .brand h1{ font-size:16px }
+            .mock-top{ flex-direction:column; align-items:flex-start; gap:10px }
+            .hero-left{ padding:8px 4px }
+            .features{ gap:8px }
+            .feature{ min-width:140px; padding:10px }
+        }
+
+        /* small accent animations */
+        .shine{
+            position:absolute; inset:0; pointer-events:none;
+            background: radial-gradient(400px 200px at 10% 10%, rgba(142,68,173,0.06), transparent 12%),
+                                    radial-gradient(300px 120px at 90% 90%, rgba(25,209,103,0.04), transparent 10%);
+            mix-blend-mode: overlay;
+            opacity:0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav" aria-label="Top navigation">
+        <a class="brand" href="#" aria-label="maxiboost home">
+            <div class="logo">MB</div>
+            <div>
+                <h1><span class="accent-maxi">maxi</span><span class="accent-boost">boost</span></h1>
+                <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:3px;font-weight:600">Social growth, elevated</div>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <a href="./login.html" class="btn" aria-label="Sign in" style="text-decoration: none;"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;Sign in</a>
+            <a href="./reg.html" class="btn btn-primary" aria-label="Get started" style="text-decoration: none;">Get Started</a>
+        </div>
+    </nav>
+
+    <main class="hero" role="main">
+        <section class="hero-left">
+            <div class="eyebrow"><span class="dot" aria-hidden></span> Trusted by creators & agencies</div>
+
+            <h2>Grow faster, convert smarter — welcome to maxiboost</h2>
+
+            <p class="lead">Maxiboost is a modern social media boosting platform built for creators, brands and agencies. Automate growth, increase reach, and convert audiences with AI-driven insights and reliable delivery — crafted for performance and safety.</p>
+
+            <div class="cta-row">
+                <button class="btn btn-primary" aria-label="Start free trial"><i class="fa-solid fa-rocket" style="margin-right:8px"></i> Start Free Trial</button>
+                <button class="btn" aria-label="Explore plans"><i class="fa-solid fa-chart-simple" style="margin-right:8px"></i> Explore Plans</button>
+                <div class="metric" title="Avg delivery time"><span class="stat">99.8%</span><span style="opacity:.9">Delivery Rate</span></div>
+            </div>
+
+            <div class="features" aria-hidden>
+                <div class="feature"><i class="fa-solid fa-bolt"></i><p>Instant Activation</p></div>
+                <div class="feature"><i class="fa-solid fa-shield-halved"></i><p>Safe & Compliant</p></div>
+                <div class="feature"><i class="fa-solid fa-gear"></i><p>Custom Targeting</p></div>
+            </div>
+
+            <div class="hero-footer">
+                <div style="color:rgba(255,255,255,0.7); font-weight:600; font-size:14px">
+                    Join 10k+ creators accelerating their growth
+                </div>
+                <div class="socials" aria-label="Social links">
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <aside class="mockup" aria-label="Demo dashboard preview">
+            <div class="shine" aria-hidden></div>
+
+            <div class="mock-top">
+                <div class="mock-pill"><i class="fa-solid fa-fire"></i> Trending Boost</div>
+                <div style="display:flex; gap:10px">
+                    <button class="btn" aria-label="Demo settings"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <button class="btn btn-primary" aria-label="Buy boost">Buy Boost</button>
+                </div>
+            </div>
+
+            <div class="mock-content">
+                <div class="card-row">
+                    <div class="profile">
+                        <div class="avatar">M</div>
+                        <div>
+                            <div class="small">Campaign</div>
+                            <div class="big">Influencer Launch</div>
+                        </div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="small">Estimate Reach</div>
+                        <div class="big">+124K</div>
+                    </div>
+                </div>
+
+                <div style="margin:10px 0 16px">
+                    <div class="small" style="margin-bottom:8px">Delivery Progress</div>
+                    <div class="progress" aria-hidden><i></i></div>
+                </div>
+
+                <div class="card-row" style="margin-top:6px">
+                    <div>
+                        <div class="small">Platform</div>
+                        <div style="font-weight:800">Instagram</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="small">Price</div>
+                        <div style="font-weight:800">€49.99</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:14px; align-items:center; justify-content:space-between">
+                <div style="font-size:12px; color:var(--muted); font-weight:700">Secure payments • 24/7 support</div>
+                <div style="display:flex; gap:8px">
+                    <button class="btn" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+                    <button class="btn btn-primary" aria-label="Quick buy"><i class="fa-solid fa-bolt"></i> Quick Buy</button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // small accessible enhancement: keyboard focus ring for buttons
+        document.addEventListener('keydown', function(e){
+            if(e.key === 'Tab') document.body.classList.add('show-focus');
+        });
+    </script>
+</body>
+</html>
