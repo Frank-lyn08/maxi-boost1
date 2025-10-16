@@ -380,94 +380,112 @@
     </div>
 
     <script>
-        // Minimal client-side interactivity & validation
-        const pw = document.getElementById('password');
-        const confirmPw = document.getElementById('confirm');
-        const toggle = document.getElementById('togglePw');
-        const pwBar = document.getElementById('pwBar');
-        const form = document.getElementById('regForm');
-        const submitBtn = document.getElementById('submitBtn');
+       // ===== Password Strength + Registration Script =====
+const pw = document.getElementById('password');
+const confirmPw = document.getElementById('confirm');
+const toggle = document.getElementById('togglePw');
+const pwBar = document.getElementById('pwBar');
+const form = document.getElementById('regForm');
+const submitBtn = document.getElementById('submitBtn');
 
-        function scorePassword(s){
-            let score = 0;
-            if (!s) return 0;
-            // length
-            score += Math.min(10, s.length) * 2;
-            // variety
-            if (/[A-Z]/.test(s)) score += 10;
-            if (/[a-z]/.test(s)) score += 10;
-            if (/[0-9]/.test(s)) score += 10;
-            if (/[^A-Za-z0-9]/.test(s)) score += 10;
-            return Math.min(100, score);
-        }
+function scorePassword(s) {
+  let score = 0;
+  if (!s) return 0;
+  // Length
+  score += Math.min(10, s.length) * 2;
+  // Variety
+  if (/[A-Z]/.test(s)) score += 10;
+  if (/[a-z]/.test(s)) score += 10;
+  if (/[0-9]/.test(s)) score += 10;
+  if (/[^A-Za-z0-9]/.test(s)) score += 10;
+  return Math.min(100, score);
+}
 
-        pw.addEventListener('input', () => {
-            const sc = scorePassword(pw.value);
-            pwBar.style.width = sc + '%';
-            if (sc < 40) pwBar.style.background = 'linear-gradient(90deg,#f97316,#ef4444)';
-            else if (sc < 75) pwBar.style.background = 'linear-gradient(90deg,#f59e0b,#f97316)';
-            else pwBar.style.background = 'linear-gradient(90deg,#10b981,#06b6d4)';
-        });
+// ===== Password Strength Bar =====
+pw.addEventListener('input', () => {
+  const sc = scorePassword(pw.value);
+  pwBar.style.width = sc + '%';
+  if (sc < 40)
+    pwBar.style.background = 'linear-gradient(90deg,#f97316,#ef4444)';
+  else if (sc < 75)
+    pwBar.style.background = 'linear-gradient(90deg,#f59e0b,#f97316)';
+  else
+    pwBar.style.background = 'linear-gradient(90deg,#10b981,#06b6d4)';
+});
 
-        toggle.addEventListener('click', () => {
-            const t = pw.type === 'password' ? 'text' : 'password';
-            pw.type = t;
-            toggle.textContent = t === 'text' ? '🙈' : '👁️';
-            toggle.setAttribute('aria-pressed', t === 'text');
-        });
+// ===== Show/Hide Password =====
+toggle.addEventListener('click', () => {
+  const t = pw.type === 'password' ? 'text' : 'password';
+  pw.type = t;
+  confirmPw.type = t;
+  toggle.textContent = t === 'text' ? '🙈' : '👁️';
+  toggle.setAttribute('aria-pressed', t === 'text');
+});
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            // Basic validation
-            const agree = document.getElementById('agree');
-            const fullnameInput = document.getElementById('fullname');
-            const usernameInput = document.getElementById('username');
-            const confirmInput = document.getElementById('confirm');
+// ===== Registration Submit =====
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-            if (pw.value.length < 8){
-                alert('Password must be at least 8 characters.');
-                pw.focus();
-                return;
-            }
-            if (pw.value !== confirmPw.value){
-                alert('Passwords do not match.');
-                confirmPw.focus();
-                return;
-            }
-            if (!agree.checked){
-                alert('You must accept Terms & Privacy to continue.');
-                return;
-            }
+  const agree = document.getElementById('agree');
+  const fullnameInput = document.getElementById('fullname');
+  const usernameInput = document.getElementById('username');
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Creating account...';
+  // ---- Basic Validation ----
+  if (pw.value.length < 8) {
+    alert('Password must be at least 8 characters long.');
+    pw.focus();
+    return;
+  }
 
-            try {
-                const res = await fetch('/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({
-                        fullname: fullnameInput.value,
-                        username: usernameInput.value,
-                        password: pw.value
-                    })
-                });
-                const data = await res.json();
-                alert(data.message || 'Done');
-                if (res.ok) {
-                    window.location.href = 'login.html';
-                } else {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Create account';
-                }
-            } catch (err) {
-                alert('Registration failed. Try again.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Create account';
-            }
-        });
+  if (pw.value !== confirmPw.value) {
+    alert('Passwords do not match.');
+    confirmPw.focus();
+    return;
+  }
+
+  if (!agree.checked) {
+    alert('You must accept the Terms & Privacy to continue.');
+    return;
+  }
+
+  // ---- Disable button while submitting ----
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating account...';
+
+  try {
+    const res = await fetch('https://maxi-boost1-3.onrender.com/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        fullname: fullnameInput.value.trim(),
+        username: usernameInput.value.trim(),
+        password: pw.value.trim()
+      })
+    });
+
+    const data = await res.json();
+    alert(data.message || 'Done');
+
+    if (res.ok) {
+      window.location.href = 'login.html';
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create account';
+    }
+  } catch (err) {
+    alert('Registration failed. Please try again.');
+    console.error(err);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Create account';
+  }
+});
 
       
     </script>
 </body>
+
 </html>
