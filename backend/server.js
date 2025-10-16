@@ -15,12 +15,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Connect to MongoDB Atlas
-mongoose.connect("mongodb+srv://franklyn:8653%40maxiboost.pgefvxo.mongodb.net/?retryWrites=true&w=majority&appName=maxiboost", {
+mongoose.connect("mongodb+srv://franklyn:8653@maxiboost.pgefvxo.mongodb.net/?retryWrites=true&w=majority&appName=maxiboost", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.error("❌ MongoDB connection error:", err));
+
 
 
 // Define User schema
@@ -123,6 +124,7 @@ app.post('/logout', (req, res) => {
 });
 
 module.exports = app;
+
 
 
 
