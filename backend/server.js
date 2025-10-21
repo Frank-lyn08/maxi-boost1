@@ -15,10 +15,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Connect to MongoDB Atlas
-mongoose.connect("mongodb+srv://franklyn:8653@maxiboost.pgefvxo.mongodb.net/?retryWrites=true&w=majority&appName=maxiboost", {
+mongoose.connect("mongodb+srv://franklyn:8653@maxiboost.pgefvxo.mongodb.net/maxiboostDB?retryWrites=true&w=majority&appName=maxiboost", {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
+});
+
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.error("❌ MongoDB connection error:", err));
 
@@ -35,6 +36,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+
 // Simple in-memory session (temporary)
 const sessions = new Map();
 
@@ -43,7 +45,7 @@ function hashPassword(password, salt) {
 }
 
 // 🟢 REGISTER
-app.post('/reg', async (req, res) => {
+app.post('/register', async (req, res) => {
   const { fullname, username, password } = req.body;
 
   if (!fullname || !username || !password) {
@@ -129,6 +131,7 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 module.exports = app;
+
 
 
 
