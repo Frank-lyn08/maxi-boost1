@@ -18,8 +18,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 mongoose.connect("mongodb+srv://franklyn:8653@maxiboost.pgefvxo.mongodb.net/maxiboostDB?retryWrites=true&w=majority&appName=maxiboost", {
   useNewUrlParser: true,
   useUnifiedTopology: true
-});
-
+})
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.error("❌ MongoDB connection error:", err));
 
@@ -131,6 +130,7 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 module.exports = app;
+
 
 
 
